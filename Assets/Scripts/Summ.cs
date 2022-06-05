@@ -1,26 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Summ50 : MonoBehaviour
+public class Summ : MonoBehaviour
 {
     public TextMeshProUGUI InfoLabel;
-    public TextMeshProUGUI SummLabel;
+    public TextMeshProUGUI SumLabel;
     public TextMeshProUGUI MovesLabel;
 
-    private int _summ;
+    private int _sum;
     private int _moves;
-    public int Summ;
+    public int Sum;
 
     void Start()
     {
-        SetInfoText($"Жми цифры от 1 до 9 чтобы их суммировать. Тебе нужно достигнуть числа {Summ}");
+        SetInfoText($"Жми цифры от 1 до 9 чтобы их суммировать. Тебе нужно достигнуть числа {Sum}");
     }
 
     void Update()
     {
-        if (_summ < Summ)
+        if (_sum < Sum)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -59,42 +57,46 @@ public class Summ50 : MonoBehaviour
                 CalculateSum(9);
             }
         }
-        else if (_summ == Summ)
+        else if (_sum == Sum)
         {
             MovesText($"Количество шагов: {_moves}");
-            SetInfoText($"Победа! Число {Summ} достигнуто! Игра окончена.\nДля повторной игры нажми клавишу пробел");
+            SetInfoText($"Победа! Число {Sum} достигнуто! Игра окончена.\nДля повторной игры нажми клавишу пробел");
         }
-        else if (_summ > Summ)
+        else if (_sum > Sum)
         {
             MovesText($"Количество шагов: {_moves}");
-            SetInfoText($"Ты проиграл! Твое число {_summ} больше {Summ}.\nДля повторной игры нажми клавишу пробел");
+            SetInfoText($"Ты проиграл! Твое число {_sum} больше {Sum}.\nДля повторной игры нажми клавишу пробел");
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _moves = 0;
-            _summ = 0;
+            _sum = 0;
             MovesText(" ");
             GetSummText(" ");
             Start();
         }
     }
+
     private void CalculateSum(int num)
     {
-        _summ += num;
+        _sum += num;
         _moves++;
-        GetSummText($"Сумма: {_summ}");
+        GetSummText($"Сумма: {_sum}");
     }
+
     private void SetInfoText(string text)
     {
         Debug.Log(text);
         InfoLabel.text = text;
     }
+
     private void GetSummText(string text)
     {
         Debug.Log(text);
-        SummLabel.text = text;
+        SumLabel.text = text;
     }
+
     private void MovesText(string text)
     {
         Debug.Log(text);

@@ -1,6 +1,6 @@
-using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MagicNumbers : MonoBehaviour
@@ -16,35 +16,25 @@ public class MagicNumbers : MonoBehaviour
     public Button FinishButton;
 
     private int _guess;
-    private int _moves = 0;
-    private int _min;
-    private int _max;
-    private bool _isEnd = true;
+    private int _moves;
 
-    void Start()
+    private void Start()
     {
         MoreButton.onClick.AddListener(MoreButtonClicked);
         LessButton.onClick.AddListener(LessButtonClicked);
         FinishButton.onClick.AddListener(FinishButtonClicked);
-        _min = Min;
-        _max = Max;
+
+
         SetInfoText($"Загадай число от {Min} до {Max}");
         CalculateGuess();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Min = _min;
-            Max = _max;
-            _guess = (Min + Max) / 2;
-            _moves = 0;
-            _isEnd = true;
-            SetInfoText($"Загадай число от {Min} до {Max}");
-            SetMovesLabel(" ");
-            CalculateGuess();
-        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            MoreButtonClicked();
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            LessButtonClicked();
     }
 
     private void CalculateGuess()
@@ -70,33 +60,35 @@ public class MagicNumbers : MonoBehaviour
         Debug.Log(text);
         MovesLabel.text = text;
     }
+
     private void FinishButtonClicked()
     {
         Debug.Log(message: "Победа");
         SetGuessLabel($"Победа! Твое число: {_guess}");
         SetMovesLabel($"Количество шагов: {_moves}");
-        _isEnd = false;
+        Invoke("End", 2.5f);
+    }
+
+    private void End()
+    {
+        SceneManager.LoadScene("WinScene");
     }
 
     private void LessButtonClicked()
     {
-        if (_isEnd)
-        {
-            Debug.Log(message: "Число меньше");
-            Max = _guess;
-            _moves++; 
-            CalculateGuess();
-        }
+        Debug.Log(message: "Число меньше");
+        Max = _guess;
+        _moves++;
+        SetMovesLabel($"Количество шагов: {_moves}");
+        CalculateGuess();
     }
 
     private void MoreButtonClicked()
     {
-        if (_isEnd)
-        {
-            Debug.Log(message: "Число больше");
-            Min = _guess;
-            _moves++;
-            CalculateGuess();
-        }
+        Debug.Log(message: "Число больше");
+        Min = _guess;
+        _moves++;
+        SetMovesLabel($"Количество шагов: {_moves}");
+        CalculateGuess();
     }
 }
